@@ -21,17 +21,14 @@ class Program
             }
         }
 
-        // Calcular suma
         int sum = 0;
         foreach (int num in numbers)
         {
             sum += num;
         }
 
-        // Calcular promedio
         double average = (double)sum / numbers.Count;
-
-        // Encontrar el mayor
+        
         int max = numbers[0];
         foreach (int num in numbers)
         {
