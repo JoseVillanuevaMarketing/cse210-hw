@@ -8,31 +8,30 @@ class Program
 
         Console.WriteLine("Enter a list of numbers, type 0 when finished.");
 
-        int userNumber = -1;
+        int number = -1;
 
-        // Leer números hasta que el usuario escriba 0
-        while (userNumber != 0)
+        while (number != 0)
         {
             Console.Write("Enter number: ");
-            userNumber = int.Parse(Console.ReadLine());
+            number = int.Parse(Console.ReadLine());
 
-            if (userNumber != 0)
+            if (number != 0)
             {
-                numbers.Add(userNumber);
+                numbers.Add(number);
             }
         }
 
-        // Calcular la suma
+        // Calcular suma
         int sum = 0;
         foreach (int num in numbers)
         {
             sum += num;
         }
 
-        // Calcular el promedio
+        // Calcular promedio
         double average = (double)sum / numbers.Count;
 
-        // Encontrar el máximo
+        // Encontrar el mayor
         int max = numbers[0];
         foreach (int num in numbers)
         {
@@ -42,40 +41,8 @@ class Program
             }
         }
 
-        // Encontrar el menor número positivo
-        int? smallestPositive = null;
-        foreach (int num in numbers)
-        {
-            if (num > 0)
-            {
-                if (smallestPositive == null || num < smallestPositive)
-                {
-                    smallestPositive = num;
-                }
-            }
-        }
-
-        // Ordenar la lista
-        numbers.Sort();
-
-        // Mostrar resultados
         Console.WriteLine($"The sum is: {sum}");
         Console.WriteLine($"The average is: {average}");
         Console.WriteLine($"The largest number is: {max}");
-
-        if (smallestPositive != null)
-        {
-            Console.WriteLine($"The smallest positive number is: {smallestPositive}");
-        }
-        else
-        {
-            Console.WriteLine("There are no positive numbers.");
-        }
-
-        Console.WriteLine("The sorted list is:");
-        foreach (int num in numbers)
-        {
-            Console.WriteLine(num);
-        }
     }
 }
