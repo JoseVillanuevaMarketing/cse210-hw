@@ -4,13 +4,13 @@ class Program
 {
     static void Main(string[] args)
     {
-      List<int> numbers = new List<int>();
+     List<int> numbers = new List<int>();
 
         Console.WriteLine("Enter a list of numbers, type 0 when finished.");
 
         int userNumber = -1;
 
-        // Recolectar números hasta que el usuario escriba 0
+        // Leer números hasta que el usuario escriba 0
         while (userNumber != 0)
         {
             Console.Write("Enter number: ");
@@ -32,7 +32,7 @@ class Program
         // Calcular el promedio
         double average = (double)sum / numbers.Count;
 
-        // Encontrar el número máximo
+        // Encontrar el máximo
         int max = numbers[0];
         foreach (int num in numbers)
         {
@@ -42,9 +42,40 @@ class Program
             }
         }
 
+        // Encontrar el menor número positivo
+        int? smallestPositive = null;
+        foreach (int num in numbers)
+        {
+            if (num > 0)
+            {
+                if (smallestPositive == null || num < smallestPositive)
+                {
+                    smallestPositive = num;
+                }
+            }
+        }
+
+        // Ordenar la lista
+        numbers.Sort();
+
         // Mostrar resultados
         Console.WriteLine($"The sum is: {sum}");
         Console.WriteLine($"The average is: {average}");
         Console.WriteLine($"The largest number is: {max}");
+
+        if (smallestPositive != null)
+        {
+            Console.WriteLine($"The smallest positive number is: {smallestPositive}");
+        }
+        else
+        {
+            Console.WriteLine("There are no positive numbers.");
+        }
+
+        Console.WriteLine("The sorted list is:");
+        foreach (int num in numbers)
+        {
+            Console.WriteLine(num);
+        }
     }
 }
