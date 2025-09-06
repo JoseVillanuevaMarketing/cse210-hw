@@ -7,8 +7,21 @@ class Program
         Console.WriteLine("Hello World! This is the Sandbox Project.");
     }
 }
-first_name = input("What is your first name? ")
+using System;
 
-last_name = input("What is your last name? ")
+class Program
+{
+    static void Main(string[] args)
+    {
+        // Pedir primer nombre
+        Console.Write("What is your first name? ");
+        string firstName = Console.ReadLine();
 
-print(f"Your name is {last_name}, {first_name} {last_name}.")
+        // Pedir apellido
+        Console.Write("What is your last name? ");
+        string lastName = Console.ReadLine();
+
+        // Mostrar resultado
+        Console.WriteLine($"Your name is {lastName}, {firstName} {lastName}.");
+    }
+}
