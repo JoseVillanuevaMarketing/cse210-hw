@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.IO;
 
 class Program
 {
@@ -88,7 +90,6 @@ class Program
     }
 }
 
-// -------------------- Clase Entry --------------------
 class Entry
 {
     public string Date { get; set; }
@@ -125,7 +126,6 @@ class Entry
     }
 }
 
-// -------------------- Clase Journal --------------------
 class Journal
 {
     private List<Entry> entries = new List<Entry>();
@@ -169,7 +169,6 @@ class Journal
     }
 }
 
-// -------------------- Clase PromptGenerator --------------------
 class PromptGenerator
 {
     private List<string> prompts = new List<string>
@@ -189,4 +188,3 @@ class PromptGenerator
         return prompts[index];
     }
 }
-👉 Ahora sí:
