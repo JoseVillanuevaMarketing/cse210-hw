@@ -4,51 +4,189 @@ class Program
 {
     static void Main(string[] args)
     {
-        Console.WriteLine("Hello World! This is the Journal Project.");
-        Console.WriteLine("---------------------------------------------------");
-        Console.WriteLine("Financial Journal - Budget Reflection");
-        Console.WriteLine("---------------------------------------------------\n");
+        Journal journal = new Journal();
+        PromptGenerator promptGen = new PromptGenerator();
 
-        // 1. Challenges
-        Console.WriteLine("1. What challenges did you have tracking your income/expenses this week?");
-        string challenges = Console.ReadLine();
-        if (string.IsNullOrWhiteSpace(challenges))
+        bool exit = false;
+        while (!exit)
         {
-            challenges = "No challenges this week. Tracking was manageable.";
+            Console.WriteLine("\n--- Menú ---");
+            Console.WriteLine("1. Escribir nueva entrada");
+            Console.WriteLine("2. Mostrar el diario");
+            Console.WriteLine("3. Guardar diario en archivo");
+            Console.WriteLine("4. Cargar diario desde archivo");
+            Console.WriteLine("5. Salir");
+            Console.Write("Elige una opción (1-5): ");
+            string choice = Console.ReadLine();
+
+            switch (choice)
+            {
+                case "1":
+                    WriteNewEntry(journal, promptGen);
+                    break;
+                case "2":
+                    journal.DisplayEntries();
+                    break;
+                case "3":
+                    SaveJournal(journal);
+                    break;
+                case "4":
+                    LoadJournal(journal);
+                    break;
+                case "5":
+                    exit = true;
+                    break;
+                default:
+                    Console.WriteLine("Opción inválida.");
+                    break;
+            }
+        }
+    }
+
+    static void WriteNewEntry(Journal journal, PromptGenerator prompts)
+    {
+        string prompt = prompts.GetRandomPrompt();
+        Console.WriteLine($"\nPrompt: {prompt}");
+        Console.WriteLine("Escribe tu respuesta (finaliza con END en una nueva línea):");
+
+        string line;
+        List<string> responseLines = new List<string>();
+        while ((line = Console.ReadLine()) != null && line.Trim().ToUpper() != "END")
+        {
+            responseLines.Add(line);
         }
 
-        // 2. SMART Goal
-        Console.WriteLine("\n2. Please write one or more SMART financial goals (with measurable value):");
-        string smartGoal = Console.ReadLine();
-        if (string.IsNullOrWhiteSpace(smartGoal))
-        {
-            smartGoal = "Save $100 this month for an emergency fund.";
-        }
+        string response = string.Join("\n", responseLines);
+        string dateText = DateTime.Now.ToShortDateString();
+        Entry entry = new Entry(dateText, prompt, response);
+        journal.AddEntry(entry);
 
-        // 3. Budget Cell Representation
-        Console.WriteLine("\n3. Where is/are your SMART financial goal(s) represented in your budget? (Example: B40)");
-        string budgetCell = Console.ReadLine();
-        if (string.IsNullOrWhiteSpace(budgetCell))
-        {
-            budgetCell = "B40";
-        }
+        Console.WriteLine("Entrada añadida.");
+    }
 
-        // 4. Envelope Method
-        Console.WriteLine("\n4. With which of your variable expenses (Groceries, etc.) would you like to practice using the envelope method?");
-        string envelopeExpense = Console.ReadLine();
-        if (string.IsNullOrWhiteSpace(envelopeExpense))
-        {
-            envelopeExpense = "Groceries";
-        }
+    static void SaveJournal(Journal journal)
+    {
+        Console.Write("Nombre del archivo para guardar: ");
+        string filename = Console.ReadLine();
+        journal.SaveToFile(filename);
+        Console.WriteLine("Diario guardado.");
+    }
 
-        // Final summary
-        Console.WriteLine("\n---------------------------------------------------");
-        Console.WriteLine("Your Financial Journal Entry:");
-        Console.WriteLine($"Challenges: {challenges}");
-        Console.WriteLine($"SMART Goal: {smartGoal}");
-        Console.WriteLine($"Budget Cell: {budgetCell}");
-        Console.WriteLine($"Envelope Method Expense: {envelopeExpense}");
-        Console.WriteLine("---------------------------------------------------");
-        Console.WriteLine("Journal entry completed. Thank you!");
+    static void LoadJournal(Journal journal)
+    {
+        Console.Write("Nombre del archivo para cargar: ");
+        string filename = Console.ReadLine();
+        if (File.Exists(filename))
+        {
+            journal.LoadFromFile(filename);
+            Console.WriteLine("Diario cargado.");
+        }
+        else
+        {
+            Console.WriteLine("Archivo no encontrado.");
+        }
     }
 }
+
+// -------------------- Clase Entry --------------------
+class Entry
+{
+    public string Date { get; set; }
+    public string Prompt { get; set; }
+    public string Response { get; set; }
+
+    private const string Separator = "~|~";
+
+    public Entry(string date, string prompt, string response)
+    {
+        Date = date;
+        Prompt = prompt;
+        Response = response;
+    }
+
+    public string ToFileString()
+    {
+        string safeResponse = Response.Replace("\n", "\\n");
+        return $"{Date}{Separator}{Prompt}{Separator}{safeResponse}";
+    }
+
+    public static Entry FromFileString(string line)
+    {
+        string[] parts = line.Split(new string[] { Separator }, StringSplitOptions.None);
+        string date = parts[0];
+        string prompt = parts[1];
+        string response = parts[2].Replace("\\n", "\n");
+        return new Entry(date, prompt, response);
+    }
+
+    public override string ToString()
+    {
+        return $"Fecha: {Date}\nPregunta: {Prompt}\nRespuesta:\n{Response}\n";
+    }
+}
+
+// -------------------- Clase Journal --------------------
+class Journal
+{
+    private List<Entry> entries = new List<Entry>();
+
+    public void AddEntry(Entry e) => entries.Add(e);
+
+    public void DisplayEntries()
+    {
+        if (entries.Count == 0)
+        {
+            Console.WriteLine("El diario está vacío.\n");
+            return;
+        }
+
+        Console.WriteLine("\n--- Entradas del Diario ---\n");
+        foreach (Entry e in entries)
+        {
+            Console.WriteLine(e);
+        }
+    }
+
+    public void SaveToFile(string filename)
+    {
+        using (StreamWriter outputFile = new StreamWriter(filename))
+        {
+            foreach (Entry e in entries)
+            {
+                outputFile.WriteLine(e.ToFileString());
+            }
+        }
+    }
+
+    public void LoadFromFile(string filename)
+    {
+        string[] lines = File.ReadAllLines(filename);
+        entries.Clear();
+        foreach (string line in lines)
+        {
+            entries.Add(Entry.FromFileString(line));
+        }
+    }
+}
+
+// -------------------- Clase PromptGenerator --------------------
+class PromptGenerator
+{
+    private List<string> prompts = new List<string>
+    {
+        "Who was the most interesting person I interacted with today?",
+        "What was the best part of my day?",
+        "How did I see the hand of the Lord in my life today?",
+        "What was the strongest emotion I felt today?",
+        "If I had one thing I could do over today, what would it be?"
+    };
+
+    private Random rnd = new Random();
+
+    public string GetRandomPrompt()
+    {
+        int index = rnd.Next(prompts.Count);
+        return prompts[index];
+    }
+}
+👉 Ahora sí:
