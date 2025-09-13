@@ -49,7 +49,6 @@ class Program
     }
 }
 
-// ---------------- CLASSES ----------------
 
 class Journal
 {
