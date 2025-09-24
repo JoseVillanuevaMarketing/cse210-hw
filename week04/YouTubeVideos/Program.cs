@@ -61,7 +61,7 @@ class Program
         List<Video> videos = new List<Video>();
 
       
-        Video video1 = new Video { Title = "C# Tutorial Basics", Author = "CodeAcademy", LengthInSeconds = 600 };
+        Video video1 = new Video { Title = "C# Tutorial Basics", Author = "Arthur", LengthInSeconds = 600 };
         video1.AddComment(new Comment("Alice", "Great explanation!"));
         video1.AddComment(new Comment("Bob", "Very helpful, thanks."));
         video1.AddComment(new Comment("Charlie", "Can you make one about classes?"));
