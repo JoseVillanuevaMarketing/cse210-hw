@@ -13,7 +13,7 @@ class Comment
     }
 }
 
-// Clase que representa un video de YouTube
+
 class Video
 {
     public string Title { get; set; }
@@ -21,19 +21,19 @@ class Video
     public int LengthInSeconds { get; set; }
     private List<Comment> comments = new List<Comment>();
 
-    // Método para agregar comentarios al video
+    
     public void AddComment(Comment comment)
     {
         comments.Add(comment);
     }
 
-    // Método para obtener la cantidad de comentarios
+    
     public int GetNumberOfComments()
     {
         return comments.Count;
     }
 
-    // Mostrar la información del video junto con sus comentarios
+
     public void DisplayVideoInfo()
     {
         Console.WriteLine($"Title: {Title}");
@@ -57,31 +57,31 @@ class Program
         Console.WriteLine("Hello World! This is the YouTubeVideos Project.");
         Console.WriteLine();
 
-        // Crear lista de videos
+    
         List<Video> videos = new List<Video>();
 
-        // Video 1
+      
         Video video1 = new Video { Title = "C# Tutorial Basics", Author = "CodeAcademy", LengthInSeconds = 600 };
         video1.AddComment(new Comment("Alice", "Great explanation!"));
         video1.AddComment(new Comment("Bob", "Very helpful, thanks."));
         video1.AddComment(new Comment("Charlie", "Can you make one about classes?"));
         videos.Add(video1);
 
-        // Video 2
+       
         Video video2 = new Video { Title = "Learn Encapsulation", Author = "DevTeacher", LengthInSeconds = 720 };
         video2.AddComment(new Comment("David", "This made encapsulation clear."));
         video2.AddComment(new Comment("Eve", "Loved the examples!"));
         video2.AddComment(new Comment("Frank", "Subbed for more content."));
         videos.Add(video2);
 
-        // Video 3
+       
         Video video3 = new Video { Title = "Intro to Abstraction", Author = "TechGuru", LengthInSeconds = 540 };
         video3.AddComment(new Comment("Grace", "Really easy to understand."));
         video3.AddComment(new Comment("Heidi", "Can you do inheritance next?"));
         video3.AddComment(new Comment("Ivan", "This helped with my assignment."));
         videos.Add(video3);
 
-        // Mostrar info de cada video
+        
         foreach (Video v in videos)
         {
             v.DisplayVideoInfo();
